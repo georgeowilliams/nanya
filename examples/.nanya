@@ -1,0 +1,11 @@
+# .nanya
+
+NO_TOUCH:
+/.env
+/secrets/*
+/infra/*
+/contracts/*
+
+READ_ONLY:
+/docs/*
+/generated/*

@@ -1,18 +1,16 @@
-# .nanya
+# .NaNya
 
 > A `.gitignore` for AI — tell AI what’s not its business.
 
 ---
 
-## What is this?
-
 `.nanya` is a tiny, portable standard for defining **AI boundaries**.
 
 It tells AI systems:
-- what they must not read
+- what they must not read 
 - what they must not modify
 
-Define it once. Enforce it anywhere.
+Define it once & enforce it in your code, with api calls, or project wide.
 
 ---
 
@@ -30,25 +28,6 @@ READ_ONLY:
 /docs/*
 /generated/*
 ```
-
----
-
-## Rules
-
-### NO_TOUCH
-- do not read
-- do not reference
-- do not modify
-
-> Treated as if it does not exist.
-
----
-
-### READ_ONLY
-- may read
-- must not modify
-
-> Reference only.
 
 ---
 
@@ -144,13 +123,27 @@ ${input}
 
 ## Works everywhere
 
-`.nanya` is not tied to any one tool.
-
-It works across:
-
 - IDE agents
 - CLI tools
 - backend systems
 - custom AI pipelines
 
-> One file. Same rules. Any environment.
+
+## Rules
+
+### NO_TOUCH
+- do not read
+- do not reference
+- do not modify
+
+> Treated as if it does not exist.
+
+---
+
+### READ_ONLY
+- may read
+- must not modify
+
+> Reference only.
+
+---

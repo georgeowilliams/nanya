@@ -1,0 +1,23 @@
+{
+  "name": "nanya",
+  "version": "1.0.0",
+  "description": "v1 .nanya core spec + parser + guard",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "nanya",
+    "ai",
+    "boundaries",
+    "policy"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}

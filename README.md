@@ -22,7 +22,7 @@ Define it once. Enforce it anywhere.
 # .nanya
 
 NO_TOUCH:
-/.env
+/env
 /secrets/*
 /contracts/*
 
@@ -36,17 +36,17 @@ READ_ONLY:
 ## Rules
 
 ### NO_TOUCH
-- do not read  
-- do not reference  
-- do not modify  
+- do not read
+- do not reference
+- do not modify
 
 > Treated as if it does not exist.
 
 ---
 
 ### READ_ONLY
-- may read  
-- must not modify  
+- may read
+- must not modify
 
 > Reference only.
 
@@ -54,68 +54,103 @@ READ_ONLY:
 
 ## How it works
 
-`.nanya` separates **rule definition** from **execution**.
+`.nanya` separates rule definition from execution.
 
-### 1. Define
-Create a `.nanya` file in your repo.
+### 1. Define boundaries
 
-### 2. Inject (depends on environment)
+You create a `.nanya` file in your repo.
 
-- Repo-aware AI → `AGENTS.md`
-- Custom pipelines → prompt injection
-- Systems → direct rule usage
+### 2. Inject rules (environment-dependent)
 
-### 3. Enforce
+| Environment | How |
+| --- | --- |
+| Repo-aware AI (Codex, etc.) | `AGENTS.md` |
+| Custom scripts / APIs | `buildNanyaInstruction()` |
+| Full systems | guard functions |
+
+### 3. Enforce behavior
+
+At runtime:
 
 ```ts
-if (!canRead(path, rules)) block();
-if (!canEdit(path, rules)) block();
+if (!canRead(path, rules)) {
+  // block read
+}
+
+if (!canEdit(path, rules)) {
+  // block edit
+}
+```
+
+---
+
+## Usage
+
+### Load rules
+
+```ts
+import { loadNanya } from 'nanya';
+
+const rules = loadNanya(process.cwd());
+```
+
+### Guard file access
+
+```ts
+import { canRead, canEdit, explainBlock } from 'nanya';
+
+if (!canRead(path, rules)) {
+  throw new Error(explainBlock(path, rules));
+}
+
+if (!canEdit(path, rules)) {
+  throw new Error(explainBlock(path, rules));
+}
+```
+
+---
+
+## Using with AI tools
+
+### Repo-aware tools (recommended)
+
+Add an `AGENTS.md` file:
+
+```md
+This repo uses `.nanya`.
+
+- NO_TOUCH: do not read or modify
+- READ_ONLY: read only, no edits
+
+Always respect these rules.
+```
+
+### Custom AI pipelines
+
+Inject rules into prompts:
+
+```ts
+import { buildNanyaInstruction } from 'nanya';
+
+const prompt = `
+${buildNanyaInstruction()}
+
+User request:
+${input}
+`;
 ```
 
 ---
 
 ## Works everywhere
 
-`.nanya` is not tied to any tool.
+`.nanya` is not tied to any one tool.
 
 It works across:
-- AI coding agents
+
+- IDE agents
 - CLI tools
 - backend systems
 - custom AI pipelines
 
 > One file. Same rules. Any environment.
-
----
-
-## Minimal usage
-
-```ts
-import { loadNanya, canRead, canEdit } from 'nanya';
-
-const rules = loadNanya(process.cwd());
-
-if (!canRead(path, rules)) throw new Error('Blocked');
-if (!canEdit(path, rules)) throw new Error('Blocked');
-```
-
----
-
-## Philosophy
-
-`.nanya` is intentionally small.
-
-- not a policy engine  
-- not a framework  
-- not a permissions system  
-
-It is a primitive.
-
-> A simple way to define what AI should not touch.
-
----
-
-## Summary
-
-Define AI boundaries once.  
-Enforce them everywhere.

@@ -49,46 +49,6 @@ You create a `.nanya` file in your repo.
 
 ### 3. Enforce behavior
 
-At runtime:
-
-```ts
-if (!canRead(path, rules)) {
-  // block read
-}
-
-if (!canEdit(path, rules)) {
-  // block edit
-}
-```
-
----
-
-## Usage
-
-### Load rules
-
-```ts
-import { loadNanya } from 'nanya';
-
-const rules = loadNanya(process.cwd());
-```
-
-### Guard file access
-
-```ts
-import { canRead, canEdit, explainBlock } from 'nanya';
-
-if (!canRead(path, rules)) {
-  throw new Error(explainBlock(path, rules));
-}
-
-if (!canEdit(path, rules)) {
-  throw new Error(explainBlock(path, rules));
-}
-```
-
----
-
 ## Using with AI tools
 
 ### Repo-aware tools (recommended)
@@ -118,6 +78,34 @@ User request:
 ${input}
 `;
 ```
+
+## Targeted Usage
+
+### Load rules
+
+```ts
+import { loadNanya } from 'nanya';
+
+const rules = loadNanya(process.cwd());
+```
+
+### Guard file access
+
+```ts
+import { canRead, canEdit, explainBlock } from 'nanya';
+
+if (!canRead(path, rules)) {
+  throw new Error(explainBlock(path, rules));
+}
+
+if (!canEdit(path, rules)) {
+  throw new Error(explainBlock(path, rules));
+}
+```
+
+---
+
+
 
 ---
 

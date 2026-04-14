@@ -1,24 +1,22 @@
-# .nanya foundation (v1)
+# .nanya
 
-`.nanya` is a tiny file standard for AI interaction boundaries in a repo.
+> A `.gitignore` for AI — tell AI what’s not its business.
 
-It works like a focused cousin of `.gitignore`, but for AI read/edit behavior.
+---
 
-## Why it exists
+## What is this?
 
-AI tools need a simple, explicit way to know which files are:
+`.nanya` is a tiny, portable standard for defining **AI boundaries**.
 
-- completely off-limits
-- readable but not editable
+It tells AI systems:
+- what they must not read
+- what they must not modify
 
-v1 keeps this intentionally small and easy to adopt.
+Define it once. Enforce it anywhere.
 
-## Rule types
+---
 
-- `NO_TOUCH`: no read, no reference, no edits
-- `READ_ONLY`: read/reference allowed, edits forbidden
-
-## Example `.nanya`
+## Example
 
 ```txt
 # .nanya
@@ -26,7 +24,6 @@ v1 keeps this intentionally small and easy to adopt.
 NO_TOUCH:
 /.env
 /secrets/*
-/infra/*
 /contracts/*
 
 READ_ONLY:
@@ -34,60 +31,91 @@ READ_ONLY:
 /generated/*
 ```
 
-## Usage
+---
+
+## Rules
+
+### NO_TOUCH
+- do not read  
+- do not reference  
+- do not modify  
+
+> Treated as if it does not exist.
+
+---
+
+### READ_ONLY
+- may read  
+- must not modify  
+
+> Reference only.
+
+---
+
+## How it works
+
+`.nanya` separates **rule definition** from **execution**.
+
+### 1. Define
+Create a `.nanya` file in your repo.
+
+### 2. Inject (depends on environment)
+
+- Repo-aware AI → `AGENTS.md`
+- Custom pipelines → prompt injection
+- Systems → direct rule usage
+
+### 3. Enforce
 
 ```ts
-import {
-  loadNanya,
-  classifyPath,
-  canRead,
-  canEdit,
-  buildNanyaInstruction
-} from 'nanya';
+if (!canRead(path, rules)) block();
+if (!canEdit(path, rules)) block();
+```
+
+---
+
+## Works everywhere
+
+`.nanya` is not tied to any tool.
+
+It works across:
+- AI coding agents
+- CLI tools
+- backend systems
+- custom AI pipelines
+
+> One file. Same rules. Any environment.
+
+---
+
+## Minimal usage
+
+```ts
+import { loadNanya, canRead, canEdit } from 'nanya';
 
 const rules = loadNanya(process.cwd());
 
-if (rules) {
-  const path = '/docs/guide.md';
-  const classification = classifyPath(path, rules); // READ_ONLY
-  const readOk = canRead(path, rules); // true
-  const editOk = canEdit(path, rules); // false
-  const instruction = buildNanyaInstruction(rules);
-
-  console.log({ classification, readOk, editOk, instruction });
-}
+if (!canRead(path, rules)) throw new Error('Blocked');
+if (!canEdit(path, rules)) throw new Error('Blocked');
 ```
 
-## Using `.nanya` with AI tools
+---
 
-`.nanya` is enforced through two layers:
+## Philosophy
 
-- **Instructions** via `AGENTS.md` to force AI systems to parse `.nanya` first.
-- **Guard logic** via this library so read/edit requests are checked before action.
+`.nanya` is intentionally small.
 
-AI systems should:
+- not a policy engine  
+- not a framework  
+- not a permissions system  
 
-1. Read `.nanya` from the repository root.
-2. Filter files before context building.
-3. Block edits when paths are `READ_ONLY` or `NO_TOUCH`.
+It is a primitive.
 
-See `examples/guardedFileFlow.ts` for a Codex-style guarded read/edit flow.
+> A simple way to define what AI should not touch.
 
-## Default instruction snippet
+---
 
-Check for `.nanya` before reading or editing files.
+## Summary
 
-- NO_TOUCH: do not read, reference, or modify
-- READ_ONLY: read allowed, no modifications
-
-If a request violates these rules, stop and explain why.
-
-## Out of scope (v1)
-
-- policy engines
-- role-based permissions
-- custom rule names
-- plugin packaging
-- IDE integration
-- CI integration
-- telemetry
+Define AI boundaries once.  
+Enforce them everywhere.

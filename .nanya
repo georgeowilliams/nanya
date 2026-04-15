@@ -1,0 +1,14 @@
+# .nanya
+# AI-agent boundary rules only. Human contributors may edit any file.
+
+ALLOW_TOUCH_BY_MAP_ONLY:
+/docs/version-maps/active/*
+/docs/execution-records/*
+/docs/briefing/*
+/docs/prompts/*
+/src/*
+/tests/*
+/AGENTS.md
+
+READ_ONLY:
+/project.md

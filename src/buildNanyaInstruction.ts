@@ -6,6 +6,7 @@ export function buildNanyaInstruction(_rules: NanyaRules): string {
     '',
     '- NO_TOUCH: do not read, reference, or modify',
     '- READ_ONLY: read allowed, no modifications',
+    '- Active version map: only edit files listed in the active map',
     '',
     'If a request violates these rules, stop and explain why.'
   ].join('\n');

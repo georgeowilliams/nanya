@@ -1,23 +1,18 @@
-# AI Agent Instructions
+# AI Execution Rules
 
-This repository uses a `.nanya` file to define AI interaction boundaries.
+This repository uses `.nanya` to define AI boundaries.
 
 Before reading or modifying any files:
-1. Locate and parse `.nanya` in the repo root.
-2. Apply the following rules:
 
-- NO_TOUCH:
-  - Do not read
-  - Do not reference
-  - Do not summarize
-  - Do not modify
+1. Load `.nanya`
+2. Apply rules:
+   - NO_TOUCH → do not read or modify
+   - READ_ONLY → read allowed, no modification
 
-- READ_ONLY:
-  - You may read and reference
-  - You must not modify
+3. Apply execution scope:
+   - Only modify files included in the active version map
+   - If a file is not in the active map, do not modify it
 
-If a requested action violates `.nanya`, stop and explain:
-- which path is blocked
-- which rule applies
-
-These rules are strict and must never be bypassed.
+If an action is blocked:
+- explain which rule caused it
+- do not proceed

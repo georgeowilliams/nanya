@@ -1,0 +1,6 @@
+# Active execution map for v1.2
+/AGENTS.md
+/src/*
+/tests/*
+/docs/briefing/map-constrained-flow.md
+/docs/version-maps/active/*
